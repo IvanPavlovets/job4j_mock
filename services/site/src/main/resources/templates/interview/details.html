@@ -78,7 +78,7 @@
                  <i class="far fa-user"></i>
                  <span>ФИО Автора</span>
                 <span th:if="${userInfo != null}">
-                 <span class="fw-bold" th:text=${userInfo.username}></span>
+                 <span class="fw-bold" th:text="${userInfo.username}"></span>
                 </span>
                  <span th:text="${'Ориентировочная дата: ' + interview.approximateDate}"></span>
                 </span>
