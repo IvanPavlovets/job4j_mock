@@ -50,7 +50,7 @@
                 <div class="card-body">
                     <table class="table">
                         <tbody class="table-hover">
-                        <tr th:each="interview: ${new_interviews}" style="cursor: pointer;">
+                        <tr th:each="interview: ${new_interviews.toList()}" users style="cursor: pointer;">
                             <td>
                                 <div>
                                     <a class="fw-bold text-dark text-decoration-none"
@@ -63,9 +63,12 @@
                                         <span class="badge bg-success">Новое</span>
                                         <i class="far fa-clock"></i>
                                         <span th:text="${#strings.substring(interview.createDate, 0, 10)}"></span>
-                                        <i class="far fa-user"></i>
-                                        <span>ФИО пользователя</span>
-                                        <span th:text="${interview.contactBy}"></span>
+                                        <span th:each="user: ${users}">
+                                            <span th:if="${interview.submitterId == user.getId()}">
+                                                <i class="far fa-user"></i>
+                                                <span th:text="${user.getUsername()}"></span>
+                                            </span>
+                                        </span>
                                     </span>
                                 </div>
                             </td>
