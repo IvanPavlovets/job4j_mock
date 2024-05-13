@@ -13,7 +13,6 @@ import ru.job4j.site.dto.ProfileDTO;
 import ru.job4j.site.service.*;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,6 +29,9 @@ public class IndexController {
     private final ProfilesService profilesService;
     private final NotificationService notifications;
 
+//    private final FilterService filterService;
+//    private final TopicsService topicsService;
+
     @GetMapping({"/", "index"})
     public String getIndexPage(Model model, HttpServletRequest req,
                                @RequestParam(required = false, defaultValue = "0") int page,
@@ -42,6 +44,16 @@ public class IndexController {
             var token = getToken(req);
             Page<InterviewDTO> interviewsPage = interviewsService.getAll(token, page, size);
             model.addAttribute("new_interviews", interviewsPage);
+
+
+//            var user = authService.userInfo(token);
+//            var userId = user != null ? user.getId() : 0;
+//            var filter = userId > 0
+//                    ? filterService.getByUserId(token, userId) : null;
+//            List<TopicIdNameDTO> topicIdNameDTOS = new ArrayList<>();
+//            topicIdNameDTOS = topicsService.getTopicIdNameDtoByCategory(filter.getCategoryId());
+
+
             Set<ProfileDTO> userList = interviewsPage.toList().stream()
                     .map(x -> profilesService.getProfileById(x.getSubmitterId()))
                     .filter(Optional::isPresent)

@@ -81,7 +81,9 @@
                         </small>
                     </td>
                     <td>
-                        <span class="badge bg-success">Новых: 100</span>
+                         <span class="badge bg-success"
+                               th:text="'Новых: ' + ${new_interviews.toList().size()}"></span>
+
                     </td>
                     <td th:if="${userDTO != null}">
                         <a class="text-decoration-none text-dark" th:if="${!userDTO.subscribeCategoryIds.contains(category.id)}"
