@@ -47,6 +47,8 @@ class IndexControllerTest {
     @MockBean
     private AuthService authService;
     @MockBean
+    private ProfilesService profilesService;
+    @MockBean
     private NotificationService notificationService;
 
     private IndexController indexController;
@@ -54,7 +56,7 @@ class IndexControllerTest {
     @BeforeEach
     void initTest() {
         this.indexController = new IndexController(
-                categoriesService, interviewsService, authService, notificationService
+                categoriesService, interviewsService, authService, profilesService, notificationService
         );
     }
 
@@ -90,7 +92,7 @@ class IndexControllerTest {
         when(interviewsService.getByType(1)).thenReturn(listInterviews);
         var listBread = List.of(new Breadcrumb("Главная", "/"));
         var model = new ConcurrentModel();
-        var view = indexController.getIndexPage(model, null);
+        var view = indexController.getIndexPage(model, null, 0, 20);
         var actualCategories = model.getAttribute("categories");
         var actualBreadCrumbs = model.getAttribute("breadcrumbs");
         var actualUserInfo = model.getAttribute("userInfo");
