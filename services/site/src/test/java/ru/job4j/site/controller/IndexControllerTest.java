@@ -106,7 +106,6 @@ class IndexControllerTest {
         when(topicsService.getByCategory(cat1.getId())).thenReturn(List.of(topicDTO1));
         when(topicsService.getByCategory(cat2.getId())).thenReturn(List.of(topicDTO2));
         when(categoriesService.getMostPopular()).thenReturn(listCat);
-        //when(interviewsService.getByType(1)).thenReturn(listInterviews);
         when(interviewsService.getAll(token, 0, 20)).thenReturn(page);
         when(profilesService.getProfileById(id)).thenReturn(Optional.of(profile));
         var listBread = List.of(new Breadcrumb("Главная", "/"));
