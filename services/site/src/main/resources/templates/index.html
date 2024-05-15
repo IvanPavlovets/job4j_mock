@@ -50,7 +50,7 @@
                 <div class="card-body">
                     <table class="table">
                         <tbody class="table-hover">
-                        <tr th:each="interview: ${new_interviews.toList()}" users style="cursor: pointer;">
+                        <tr th:each="interview: ${new_interviews}" users style="cursor: pointer;">
                             <td>
                                 <div>
                                     <a class="fw-bold text-dark text-decoration-none"
@@ -109,7 +109,7 @@
                             </td>
                             <td>
                                 <span class="badge bg-success"
-                                      th:text="'Новых: ' + ${new_interviews.toList().size()}"></span>
+                                      th:text="'Новых: ' + ${new_interviews.size()}"></span>
 
                             </td>
                         </tr>
