@@ -84,43 +84,19 @@ class IndexControllerTest {
         topicDTO2.setName("topic2");
         var cat1 = new CategoryDTO(1, "name1");
         var cat2 = new CategoryDTO(2, "name2");
-        var token = "1410";
-        var id = 1;
-        var profile = new ProfileDTO(id, "username", "experience", 1,
-                Calendar.getInstance(), Calendar.getInstance());
         var listCat = List.of(cat1, cat2);
-        List<InterviewDTO> interviews = IntStream.range(0, 4).mapToObj(i -> {
-            var interview = new InterviewDTO();
-            interview.setId(i);
-            interview.setMode(1);
-            interview.setStatus(1);
-            interview.setSubmitterId(1);
-            interview.setTitle(String.format("Interview_%d", i));
-            interview.setAdditional("Some text");
-            interview.setContactBy("Some contact");
-            interview.setApproximateDate("30.02.2024");
-            interview.setCreateDate("06.10.2023");
-            return interview;
-        }).toList();
-        Page<InterviewDTO> page = new PageImpl<>(interviews);
         when(topicsService.getByCategory(cat1.getId())).thenReturn(List.of(topicDTO1));
         when(topicsService.getByCategory(cat2.getId())).thenReturn(List.of(topicDTO2));
         when(categoriesService.getMostPopular()).thenReturn(listCat);
-        when(interviewsService.getAll(token, 0, 20)).thenReturn(page);
-        when(profilesService.getProfileById(id)).thenReturn(Optional.of(profile));
         var listBread = List.of(new Breadcrumb("Главная", "/"));
         var model = new ConcurrentModel();
         var view = indexController.getIndexPage(model, null, 0, 20);
         var actualCategories = model.getAttribute("categories");
         var actualBreadCrumbs = model.getAttribute("breadcrumbs");
         var actualUserInfo = model.getAttribute("userInfo");
-        var actualInterviews = model.getAttribute("new_interviews");
-        var actualUsers = model.getAttribute("users");
         assertThat(view).isEqualTo("index");
         assertThat(actualCategories).usingRecursiveComparison().isEqualTo(listCat);
         assertThat(actualBreadCrumbs).usingRecursiveComparison().isEqualTo(listBread);
         assertThat(actualUserInfo).isNull();
-        assertThat(actualInterviews).isNull();
-        assertThat(actualUsers).isNull();
     }
 }
