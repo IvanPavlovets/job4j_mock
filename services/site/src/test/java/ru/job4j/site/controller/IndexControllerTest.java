@@ -121,5 +121,6 @@ class IndexControllerTest {
         assertThat(actualBreadCrumbs).usingRecursiveComparison().isEqualTo(listBread);
         assertThat(actualUserInfo).isNull();
         assertThat(actualInterviews).isNull();
+        assertThat(actualUsers).isNull();
     }
 }
