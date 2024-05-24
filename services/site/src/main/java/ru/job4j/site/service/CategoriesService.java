@@ -51,6 +51,14 @@ public class CategoriesService {
                 token, mapper.writeValueAsString(categoryId));
     }
 
+    /**
+     * В цикле установливаем значения поля topicsSize, модели CategoryDTO,
+     * разбиение тем по категориям, т.е. количество категорий (из -
+     * Java Base, Java Core, Spring) встречающихся в темах (модель TopicDTO)
+     *
+     * @return возварщает количество CategoryDTO в каждом TopicDTO
+     * @throws JsonProcessingException
+     */
     public List<CategoryDTO> getAllWithTopics() throws JsonProcessingException {
         var categoriesDTO = getAll();
         for (var categoryDTO : categoriesDTO) {

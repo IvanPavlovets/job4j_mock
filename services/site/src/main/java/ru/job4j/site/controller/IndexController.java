@@ -48,6 +48,9 @@ public class IndexController {
                     .map(Optional::get)
                     .collect(Collectors.toSet());
             model.addAttribute("users", userList);
+            int newStatusAmount = interviewsPage.stream().filter(
+                    interviewDTO -> interviewDTO.getStatus() == 1).toList().size();
+            model.addAttribute("amount_new_interviews", newStatusAmount);
             if (token != null) {
                 var userInfo = authService.userInfo(token);
                 model.addAttribute("userDTO", notifications.findCategoriesByUserId(userInfo.getId()));
