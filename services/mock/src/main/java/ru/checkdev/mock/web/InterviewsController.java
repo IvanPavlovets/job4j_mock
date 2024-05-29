@@ -39,6 +39,18 @@ public class InterviewsController {
                 .body(interviewService.findByMode(mode));
     }
 
+    /**
+     * Находим собеседования с определеным статусом
+     * IS_NEW(1, "Новое"),
+     * IN_PROGRESS(2, "В процессе")
+     */
+    @GetMapping("/findByStatus/{status}")
+    public ResponseEntity<List<Interview>> findByStatus(@PathVariable int status) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(interviewService.findByStatus(status));
+    }
+
     @GetMapping("/findByTopicId/{topicId}")
     public ResponseEntity<Page<Interview>> findByTopicId(
             @PathVariable int topicId,

@@ -65,6 +65,16 @@ public class InterviewService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Достаем модели Interview из соответсвуещего репозитория
+     * @param status статус собеседование (новое, в процессе ...)
+     * @return List<Interview>
+     */
+    public List<Interview> findByStatus(int status) {
+        return interviewRepository.findByStatus(status);
+    }
+
+
     public Page<Interview> findByTopicId(int topicId, int page, int size) {
         return interviewRepository.findByTopicId(topicId, PageRequest.of(page, size));
     }
@@ -102,4 +112,5 @@ public class InterviewService {
             return false;
         }
     }
+
 }

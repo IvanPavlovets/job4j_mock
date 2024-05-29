@@ -17,6 +17,11 @@ public interface InterviewRepository extends JpaRepository<Interview, Integer> {
 
     Optional<Interview> findById(int id);
 
+    /**
+     * Достаем модель Interview с соответсвуещим статусом.
+     */
+    List<Interview> findByStatus(int status);
+
     List<Interview> findByMode(int mode);
 
     Page<Interview> findByTopicId(int topicId, Pageable pageable);
