@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
-@DataJpaTest()
+@DataJpaTest(showSql = false)
 @RunWith(SpringRunner.class)
 class WisherRepositoryTest {
     private Interview interview;

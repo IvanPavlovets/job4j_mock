@@ -3,6 +3,6 @@
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
     <logger name="at.compax.bbsng.app" level="error"/>
     <logger name="org.springframework " level="error"/>
-    <logger name="org.hibernate.SQL" level="error"/>
+    <logger name="org.hibernate" level="error"/>
     <logger name="liquibase" level="error"/>
 </configuration>

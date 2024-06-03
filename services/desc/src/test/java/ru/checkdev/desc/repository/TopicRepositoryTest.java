@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Dmitry Stepanov, user Dmitry
  * @since 16.10.2023
  */
-@DataJpaTest
+@DataJpaTest(showSql = false)
 @RunWith(SpringRunner.class)
 @ExtendWith(SpringExtension.class)
 class TopicRepositoryTest {

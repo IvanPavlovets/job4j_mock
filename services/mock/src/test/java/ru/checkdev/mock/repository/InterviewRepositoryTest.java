@@ -22,7 +22,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DataJpaTest()
+@DataJpaTest(showSql = false)
 @RunWith(SpringRunner.class)
 class InterviewRepositoryTest {
 

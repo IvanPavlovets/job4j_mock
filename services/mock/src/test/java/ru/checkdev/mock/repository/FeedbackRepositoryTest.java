@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.*;
  * @author Dmitry Stepanov, user Dmitry
  * @since 25.10.2023
  */
-@DataJpaTest
+@DataJpaTest(showSql = false)
 @RunWith(SpringRunner.class)
 class FeedbackRepositoryTest {
     private Interview interview;
