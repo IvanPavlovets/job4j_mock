@@ -1,15 +1,19 @@
 package ru.checkdev.notification.telegram.action;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.checkdev.notification.domain.PersonDTO;
+import ru.checkdev.notification.domain.TgUser;
+import ru.checkdev.notification.service.TgUserService;
 import ru.checkdev.notification.telegram.config.TgConfig;
 import ru.checkdev.notification.telegram.service.TgAuthCallWebClint;
 
 import java.util.Calendar;
+import java.util.Map;
 
 /**
  * 3. Мидл
@@ -18,20 +22,41 @@ import java.util.Calendar;
  * @author Dmitry Stepanov, user Dmitry
  * @since 12.09.2023
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class RegAction implements Action {
+    private final String sl = System.lineSeparator();
     private static final String ERROR_OBJECT = "error";
     private static final String URL_AUTH_REGISTRATION = "/registration";
     private final TgConfig tgConfig = new TgConfig("tg/", 8);
     private final TgAuthCallWebClint authCallWebClint;
+    private final TgUserService tgUserService;
     private final String urlSiteAuth;
 
+    private String username = "";
+
+    private final String textName = "Введите имя для регистрации нового пользователя:";
+    private String textEmail = "Введите email для регистрации:";
+
     @Override
-    public BotApiMethod<Message> handle(Message message) {
+    public BotApiMethod<Message> handle(Message message, Map<String, String> bindingBy) {
         var chatId = message.getChatId().toString();
-        var text = "Введите email для регистрации:";
-        return new SendMessage(chatId, text);
+
+        var tgUser = tgUserService.findByChatId(message.getChatId().intValue());
+        if (tgUser != null) {
+            textEmail = "Для Вашего аккаунта уже выполнена регистрация."
+                    + sl
+                    + "/start";
+            return new SendMessage(chatId, textEmail);
+        }
+
+        var msg = message.getText();
+        if (msg.equals("/new")) {
+            return new SendMessage(chatId, textName);
+        }
+        username = message.getText();
+
+        return new SendMessage(chatId, textEmail);
     }
 
     /**
@@ -61,7 +86,7 @@ public class RegAction implements Action {
         }
 
         var password = tgConfig.getPassword();
-        var person = new PersonDTO(email, password, true, null,
+        var person = new PersonDTO(username, email, password, true, null,
                 Calendar.getInstance());
         Object result;
         try {
@@ -73,17 +98,23 @@ public class RegAction implements Action {
             return new SendMessage(chatId, text);
         }
 
-        var mapObject = tgConfig.getObjectToMap(result);
+        Map<String, Map> mapObject = tgConfig.getObjectToMap(result);
 
         if (mapObject.containsKey(ERROR_OBJECT)) {
             text = "Ошибка регистрации: " + mapObject.get(ERROR_OBJECT);
             return new SendMessage(chatId, text);
         }
 
+        int userId = (int) mapObject.get("person").get("id");
+
+        tgUserService.save(new TgUser(0, userId, Integer.parseInt(chatId)));
+
         text = "Вы зарегистрированы: " + sl
+               + "Имя: " + username + sl
                + "Логин: " + email + sl
                + "Пароль: " + password + sl
                + urlSiteAuth;
         return new SendMessage(chatId, text);
     }
+
 }
