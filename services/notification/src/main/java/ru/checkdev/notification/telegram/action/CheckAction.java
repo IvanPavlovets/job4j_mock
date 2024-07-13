@@ -30,12 +30,10 @@ public class CheckAction implements Action {
     public BotApiMethod<Message> handle(Message message, Map<String, String> bindingBy) {
         var sl = System.lineSeparator();
         var chatId = message.getChatId().toString();
-        var tgUser = tgUserService.findByChatId(message.getChatId().intValue());
         var text = "";
+        var tgUser = tgUserService.findByChatId(message.getChatId().intValue());
         if (tgUser == null) {
-            text = "Для Вашего аккаунта регистрация не выполнена."
-                    + sl
-                    + "/start";
+            text = String.format("Для Вашего аккаунта регистрация не выполнена. %s/start", sl);
             return send(chatId, text, bindingBy);
         }
 
@@ -45,8 +43,7 @@ public class CheckAction implements Action {
             personDTO = authCallWebClint.doGetPerson(urlPerson).block();
         } catch (Exception e) {
             log.error("WebClient doGetPerson error: {}", e.getMessage());
-            text = "Сервис не доступен попробуйте позже" + sl
-                    + "/start";
+            text = String.format("Сервис не доступен попробуйте позже %s/start", sl);
             return send(chatId, text, bindingBy);
         }
 

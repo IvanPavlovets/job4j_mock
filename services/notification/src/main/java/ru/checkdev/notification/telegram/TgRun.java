@@ -41,6 +41,9 @@ public class TgRun {
     @Value("${server.site.url.person}")
     private String urlSitePerson;
 
+    @Value("${server.site.url.change.password}")
+    private String urlSiteChangePassword;
+
     /**
      * 1) TelegramBotsApi - менеджер в котором содержаться
      * все необходимые вызовы с сервисом.
@@ -64,8 +67,8 @@ public class TgRun {
                 )),
                 "/new", new RegAction(tgAuthCallWebClint, tgUserService, urlSiteAuth),
                 "/echo", new EchoAction("/echo"),
-                "/check", new CheckAction(tgUserService, tgAuthCallWebClint, urlSitePerson)
-//                "/forget", new ForgetAction(tgAuthCallWebClint, urlSiteAuth),
+                "/check", new CheckAction(tgUserService, tgAuthCallWebClint, urlSitePerson),
+                "/forget", new ForgetAction(tgUserService, tgAuthCallWebClint, urlSiteChangePassword)
 //                "/notify", new NotifyAction(tgAuthCallWebClint, urlSiteAuth),
 //                "/unnotify", new NotifyAction(tgAuthCallWebClint, urlSiteAuth)
         );

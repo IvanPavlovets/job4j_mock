@@ -44,9 +44,7 @@ public class RegAction implements Action {
 
         var tgUser = tgUserService.findByChatId(message.getChatId().intValue());
         if (tgUser != null) {
-            textEmail = "Для Вашего аккаунта уже выполнена регистрация."
-                    + sl
-                    + "/start";
+            textEmail = String.format("Для Вашего аккаунта уже выполнена регистрация. %s/start", sl);
             return new SendMessage(chatId, textEmail);
         }
 
