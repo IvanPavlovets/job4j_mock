@@ -11,6 +11,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.checkdev.notification.service.TgUserService;
 import ru.checkdev.notification.telegram.action.*;
 import ru.checkdev.notification.telegram.service.TgAuthCallWebClint;
+import ru.checkdev.notification.telegram.service.TgMockCallWebClint;
 
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TgRun {
     private final TgAuthCallWebClint tgAuthCallWebClint;
+    private final TgMockCallWebClint tgMockCallWebClint;
     private final TgUserService tgUserService;
     @Value("${tg.username}")
     private String username;
@@ -62,15 +64,15 @@ public class TgRun {
                         "/echo - Команды echo",
                         "/check - Выдать ФИО и почту, привязанную к этому аккаунту",
                         "/forget - Восстановить пароль",
-                        "/notify - Подписаться на уведомления",
-                        "/unnotify - Отписаться от уведомлений"
+                        "/bind - Ввести логин и пароль, чтобы привязать аккаунт telegram к CheckDev",
+                        "/unbind - Ввести логин и пароль, чтобы отвязать аккаунт telegram от CheckDev."
                 )),
                 "/new", new RegAction(tgAuthCallWebClint, tgUserService, urlSiteAuth),
                 "/echo", new EchoAction("/echo"),
                 "/check", new CheckAction(tgUserService, tgAuthCallWebClint, urlSitePerson),
-                "/forget", new ForgetAction(tgUserService, tgAuthCallWebClint, urlSiteChangePassword)
-//                "/notify", new NotifyAction(tgAuthCallWebClint, urlSiteAuth),
-//                "/unnotify", new NotifyAction(tgAuthCallWebClint, urlSiteAuth)
+                "/forget", new ForgetAction(tgUserService, tgAuthCallWebClint, urlSiteChangePassword),
+                "/bind", new SubscribeAction(tgUserService, tgAuthCallWebClint, tgMockCallWebClint)
+//                "/unbind", new NotifyAction(tgAuthCallWebClint, urlSiteAuth)
         );
         try {
             BotMenu menu = new BotMenu(actionMap, username, token);

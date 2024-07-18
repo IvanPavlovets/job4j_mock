@@ -46,7 +46,7 @@ public class EchoAction implements Action {
      * @return
      */
     @Override
-    public BotApiMethod<Message> callback(Message message) {
+    public BotApiMethod<Message> callback(Message message, Map<String, String> bindingBy) {
         var chatId = message.getChatId().toString();
         var out = new StringBuilder();
 

@@ -47,7 +47,7 @@ public class ForgetAction implements Action {
     }
 
     @Override
-    public BotApiMethod<Message> callback(Message message) {
+    public BotApiMethod<Message> callback(Message message, Map<String, String> bindingBy) {
         return null;
     }
 

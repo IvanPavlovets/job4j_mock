@@ -30,6 +30,7 @@ public class SecurityConfig {
                 "/forgot",
                 "/auth/activated/**",
                 "/person/**",
+                "/person/check",
                 "/person/by",
                 "/person/random",
                 "/person/resume/**",
