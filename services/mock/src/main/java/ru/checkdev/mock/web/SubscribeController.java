@@ -16,17 +16,16 @@ public class SubscribeController {
 
     private final SubscribeService service;
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<Object> subscribe(@RequestBody long chatId) {
         Subscribe result = service.save(new Subscribe(0, chatId));
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/")
-    public ResponseEntity<Boolean> unsubscribe(@RequestBody long chatId) {
-        boolean result = service.delete(chatId);
-        return new ResponseEntity<>(
-                result,
-                result ? HttpStatus.OK : HttpStatus.CONFLICT);
+    @DeleteMapping("/{chatId}")
+    public ResponseEntity<Integer> unsubscribe(@PathVariable long chatId) {
+        int res = service.deleteByChatId(chatId);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
 }

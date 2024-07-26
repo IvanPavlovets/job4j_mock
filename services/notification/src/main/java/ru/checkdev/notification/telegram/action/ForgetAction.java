@@ -10,9 +10,11 @@ import ru.checkdev.notification.service.TgUserService;
 import ru.checkdev.notification.telegram.config.TgConfig;
 import ru.checkdev.notification.telegram.service.TgAuthCallWebClint;
 
-import java.util.Calendar;
 import java.util.Map;
 
+/**
+ * Реализуем восстановление пароля
+ */
 @AllArgsConstructor
 @Slf4j
 public class ForgetAction implements Action {

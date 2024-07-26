@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.checkdev.notification.domain.PersonDTO;
+import ru.checkdev.notification.exception.ConstraintKeyException;
 import ru.checkdev.notification.service.TgUserService;
 import ru.checkdev.notification.telegram.service.TgAuthCallWebClint;
 import ru.checkdev.notification.telegram.service.TgMockCallWebClint;
@@ -13,19 +14,21 @@ import ru.checkdev.notification.telegram.service.TgMockCallWebClint;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Класс реализует привязку пользователя с проверкой почты и пароля
+ */
+
 @RequiredArgsConstructor
 @Slf4j
 public class SubscribeAction implements Action {
     private final Map<String, String> idEmail = new ConcurrentHashMap<>();
-    private static final String URL_USER_CHECK = "/person/check";
-    private static final String URL_USER_SUBSCRIBE = "/subscribe";
-    private final String textEmail = "Введите email:";
-    private final String textPassword = "Введите password:";
     private final String sl = System.lineSeparator();
     private String action;
     private final TgUserService tgUserService;
     private final TgAuthCallWebClint tgAuthCallWebClint;
     private final TgMockCallWebClint tgMockCallWebClint;
+    private final String urlUserCheck;
+    private final String urlUserSubcribe;
 
     @Override
     public BotApiMethod<Message> handle(Message message, Map<String, String> bindingBy) {
@@ -39,8 +42,10 @@ public class SubscribeAction implements Action {
         }
 
         if (!idEmail.containsKey(chatId)) {
+            String textEmail = "Введите email:";
             return new SendMessage(chatId, textEmail);
         }
+        String textPassword = "Введите password:";
         return new SendMessage(chatId, textPassword);
     }
 
@@ -59,26 +64,26 @@ public class SubscribeAction implements Action {
         idEmail.remove(chatId);
         boolean resAuth;
         try {
-            resAuth = (boolean) tgAuthCallWebClint.doPost(URL_USER_CHECK, personDTO).block();
+            resAuth = (boolean) tgAuthCallWebClint.doPost(urlUserCheck, personDTO).block();
             if (!resAuth) {
                 String text = String.format("Введены неверные данные %s/start", sl);
                 return send(chatId, text, bindingBy);
             }
         } catch (Exception e) {
             log.error("WebClient doPost error: {}", e.getMessage());
-            String text = String.format("Сервис не доступен попробуйте позже %s/start", sl);
+            String text = String.format("Сервис недоступен попробуйте позже %s/start", sl);
             return send(chatId, text, bindingBy);
         }
 
         try {
-            var res = tgMockCallWebClint.doPost(URL_USER_SUBSCRIBE, message.getChatId()).block();
-            if (res == null) {
-                String text = String.format("Вы ранее уже были подписаны %s/start", sl);
-                return send(chatId, text, bindingBy);
-            }
+            tgMockCallWebClint.doPost(urlUserSubcribe, message.getChatId()).block();
+        } catch (ConstraintKeyException e) {
+            log.error("WebClient doGet error: {}", e.getMessage());
+            String text = String.format("Вы ранее уже были подписаны %s/start", sl);
+            return send(chatId, text, bindingBy);
         } catch (Exception e) {
             log.error("WebClient doPost error: {}", e.getMessage());
-            String text = String.format("Сервис не доступен попробуйте позже %s/start", sl);
+            String text = String.format("Сервис недоступен попробуйте позже %s/start", sl);
             return send(chatId, text, bindingBy);
         }
         return send(chatId, "Вы подписаны", bindingBy);

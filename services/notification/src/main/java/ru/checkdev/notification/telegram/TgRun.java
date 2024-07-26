@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import ru.checkdev.notification.telegram.action.UnsubscribeAction;
 import ru.checkdev.notification.service.TgUserService;
 import ru.checkdev.notification.telegram.action.*;
 import ru.checkdev.notification.telegram.service.TgAuthCallWebClint;
@@ -46,6 +47,11 @@ public class TgRun {
     @Value("${server.site.url.change.password}")
     private String urlSiteChangePassword;
 
+    @Value("${url.user.check}")
+    private String urlUserCheck;
+    @Value("${url.user.subscribe}")
+    private String urlUserSubscribe;
+
     /**
      * 1) TelegramBotsApi - менеджер в котором содержаться
      * все необходимые вызовы с сервисом.
@@ -71,8 +77,8 @@ public class TgRun {
                 "/echo", new EchoAction("/echo"),
                 "/check", new CheckAction(tgUserService, tgAuthCallWebClint, urlSitePerson),
                 "/forget", new ForgetAction(tgUserService, tgAuthCallWebClint, urlSiteChangePassword),
-                "/bind", new SubscribeAction(tgUserService, tgAuthCallWebClint, tgMockCallWebClint)
-//                "/unbind", new NotifyAction(tgAuthCallWebClint, urlSiteAuth)
+                "/bind", new SubscribeAction(tgUserService, tgAuthCallWebClint, tgMockCallWebClint, urlUserCheck, urlUserSubscribe),
+                "/unbind", new UnsubscribeAction(tgMockCallWebClint, urlUserSubscribe)
         );
         try {
             BotMenu menu = new BotMenu(actionMap, username, token);

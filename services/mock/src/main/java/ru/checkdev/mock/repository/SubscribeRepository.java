@@ -3,14 +3,14 @@ package ru.checkdev.mock.repository;
 import org.springframework.data.repository.CrudRepository;
 import ru.checkdev.mock.domain.Subscribe;
 
-import java.util.Optional;
+import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 
 public interface SubscribeRepository extends CrudRepository<Subscribe, Long> {
 
-    @Override
-    Optional<Subscribe> findById(Long chatId);
-
+    @NotNull
     Subscribe save(Subscribe subscribe);
 
-    boolean deleteByChatId(long id);
+    @Transactional
+    int deleteByChatId(long id);
 }
