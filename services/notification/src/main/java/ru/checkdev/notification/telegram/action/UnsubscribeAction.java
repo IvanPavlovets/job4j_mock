@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import ru.checkdev.notification.telegram.service.TgMockCallWebClint;
+import ru.checkdev.notification.telegram.service.TgMockCallWebClient;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 public class UnsubscribeAction implements Action {
 
     private final String sl = System.lineSeparator();
-    private final TgMockCallWebClint tgMockCallWebClint;
+    private final TgMockCallWebClient tgMockCallWebClient;
     private final String urlUserSubscribe;
 
     @Override
@@ -22,7 +22,7 @@ public class UnsubscribeAction implements Action {
         String text;
         String chatId = message.getChatId().toString();
         try {
-            int res = (int) tgMockCallWebClint.doDelete(urlUserSubscribe + "/" + message.getChatId()).block();
+            int res = (int) tgMockCallWebClient.doDelete(urlUserSubscribe + "/" + message.getChatId()).block();
             if (res != 0) {
                 text = "Отписка успешно выполнена";
                 return send(chatId, text, bindingBy);

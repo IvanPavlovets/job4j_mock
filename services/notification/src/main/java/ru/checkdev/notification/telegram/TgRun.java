@@ -11,8 +11,8 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.checkdev.notification.telegram.action.UnsubscribeAction;
 import ru.checkdev.notification.service.TgUserService;
 import ru.checkdev.notification.telegram.action.*;
-import ru.checkdev.notification.telegram.service.TgAuthCallWebClint;
-import ru.checkdev.notification.telegram.service.TgMockCallWebClint;
+import ru.checkdev.notification.telegram.service.TgAuthCallWebClient;
+import ru.checkdev.notification.telegram.service.TgMockCallWebClient;
 
 import java.util.List;
 import java.util.Map;
@@ -31,8 +31,8 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class TgRun {
-    private final TgAuthCallWebClint tgAuthCallWebClint;
-    private final TgMockCallWebClint tgMockCallWebClint;
+    private final TgAuthCallWebClient tgAuthCallWebClient;
+    private final TgMockCallWebClient tgMockCallWebClient;
     private final TgUserService tgUserService;
     @Value("${tg.username}")
     private String username;
@@ -73,12 +73,12 @@ public class TgRun {
                         "/bind - Ввести логин и пароль, чтобы привязать аккаунт telegram к CheckDev",
                         "/unbind - Ввести логин и пароль, чтобы отвязать аккаунт telegram от CheckDev."
                 )),
-                "/new", new RegAction(tgAuthCallWebClint, tgUserService, urlSiteAuth),
+                "/new", new RegAction(tgAuthCallWebClient, tgUserService, urlSiteAuth),
                 "/echo", new EchoAction("/echo"),
-                "/check", new CheckAction(tgUserService, tgAuthCallWebClint, urlSitePerson),
-                "/forget", new ForgetAction(tgUserService, tgAuthCallWebClint, urlSiteChangePassword),
-                "/bind", new SubscribeAction(tgUserService, tgAuthCallWebClint, tgMockCallWebClint, urlUserCheck, urlUserSubscribe),
-                "/unbind", new UnsubscribeAction(tgMockCallWebClint, urlUserSubscribe)
+                "/check", new CheckAction(tgUserService, tgAuthCallWebClient, urlSitePerson),
+                "/forget", new ForgetAction(tgUserService, tgAuthCallWebClient, urlSiteChangePassword),
+                "/bind", new SubscribeAction(tgUserService, tgAuthCallWebClient, tgMockCallWebClient, urlUserCheck, urlUserSubscribe),
+                "/unbind", new UnsubscribeAction(tgMockCallWebClient, urlUserSubscribe)
         );
         try {
             BotMenu menu = new BotMenu(actionMap, username, token);

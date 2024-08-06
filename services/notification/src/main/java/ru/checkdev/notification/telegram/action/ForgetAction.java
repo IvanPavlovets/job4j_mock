@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.checkdev.notification.domain.PersonDTO;
 import ru.checkdev.notification.service.TgUserService;
 import ru.checkdev.notification.telegram.config.TgConfig;
-import ru.checkdev.notification.telegram.service.TgAuthCallWebClint;
+import ru.checkdev.notification.telegram.service.TgAuthCallWebClient;
 
 import java.util.Map;
 
@@ -21,7 +21,7 @@ public class ForgetAction implements Action {
     private final String sl = System.lineSeparator();
     private final TgConfig tgConfig = new TgConfig("tg/", 8);
     private final TgUserService tgUserService;
-    private final TgAuthCallWebClint authCallWebClint;
+    private final TgAuthCallWebClient authCallWebClint;
     private final String urlSiteChangePassword;
 
     @Override
@@ -30,7 +30,7 @@ public class ForgetAction implements Action {
         var text = "";
         var tgUser = tgUserService.findByChatId(message.getChatId().intValue());
         if (tgUser == null) {
-            text = String.format("Для Вашего аккаунта регистрация не выполнена. %s/start", sl);
+            text = String.format("Для Вашего аккаунта регистрация не выполнена.%s/start", sl);
             return send(chatId, text, bindingBy);
         }
 
@@ -41,7 +41,7 @@ public class ForgetAction implements Action {
             authCallWebClint.doPost(urlPerson, person).block();
         } catch (Exception e) {
             log.error("WebClient doPost error: {}", e.getMessage());
-            text = String.format("Сервис не доступен попробуйте позже %s/start", sl);
+            text = String.format("Сервис не доступен попробуйте позже.%s/start", sl);
             return send(chatId, text, bindingBy);
         }
 

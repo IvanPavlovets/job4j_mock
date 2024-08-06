@@ -10,10 +10,10 @@ import ru.checkdev.notification.exception.ConstraintKeyException;
 
 @Service
 @Slf4j
-public class TgMockCallWebClint {
+public class TgMockCallWebClient {
     private WebClient webClient;
 
-    public TgMockCallWebClint(@Value("${server.mock}") String urlMock) {
+    public TgMockCallWebClient(@Value("${server.mock}") String urlMock) {
         this.webClient = WebClient.create(urlMock);
     }
 

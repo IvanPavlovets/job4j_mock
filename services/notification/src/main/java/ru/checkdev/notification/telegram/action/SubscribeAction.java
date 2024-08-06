@@ -8,8 +8,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.checkdev.notification.domain.PersonDTO;
 import ru.checkdev.notification.exception.ConstraintKeyException;
 import ru.checkdev.notification.service.TgUserService;
-import ru.checkdev.notification.telegram.service.TgAuthCallWebClint;
-import ru.checkdev.notification.telegram.service.TgMockCallWebClint;
+import ru.checkdev.notification.telegram.service.TgAuthCallWebClient;
+import ru.checkdev.notification.telegram.service.TgMockCallWebClient;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,8 +25,8 @@ public class SubscribeAction implements Action {
     private final String sl = System.lineSeparator();
     private String action;
     private final TgUserService tgUserService;
-    private final TgAuthCallWebClint tgAuthCallWebClint;
-    private final TgMockCallWebClint tgMockCallWebClint;
+    private final TgAuthCallWebClient tgAuthCallWebClient;
+    private final TgMockCallWebClient tgMockCallWebClient;
     private final String urlUserCheck;
     private final String urlUserSubcribe;
 
@@ -37,7 +37,7 @@ public class SubscribeAction implements Action {
         action = bindingBy.get(chatId);
         var tgUser = tgUserService.findByChatId(message.getChatId().intValue());
         if (tgUser == null) {
-            text = String.format("Для Вашего аккаунта регистрация не выполнена. %s/start", sl);
+            text = String.format("Для Вашего аккаунта регистрация не выполнена.%s/start", sl);
             return new SendMessage(chatId, text);
         }
 
@@ -64,7 +64,7 @@ public class SubscribeAction implements Action {
         idEmail.remove(chatId);
         boolean resAuth;
         try {
-            resAuth = (boolean) tgAuthCallWebClint.doPost(urlUserCheck, personDTO).block();
+            resAuth = (boolean) tgAuthCallWebClient.doPost(urlUserCheck, personDTO).block();
             if (!resAuth) {
                 String text = String.format("Введены неверные данные %s/start", sl);
                 return send(chatId, text, bindingBy);
@@ -76,7 +76,7 @@ public class SubscribeAction implements Action {
         }
 
         try {
-            tgMockCallWebClint.doPost(urlUserSubcribe, message.getChatId()).block();
+            tgMockCallWebClient.doPost(urlUserSubcribe, message.getChatId()).block();
         } catch (ConstraintKeyException e) {
             log.error("WebClient doGet error: {}", e.getMessage());
             String text = String.format("Вы ранее уже были подписаны %s/start", sl);

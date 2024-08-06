@@ -18,10 +18,10 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class TgAuthCallWebClint {
+public class TgAuthCallWebClient {
     private WebClient webClient;
 
-    public TgAuthCallWebClint(@Value("${server.auth}") String urlAuth) {
+    public TgAuthCallWebClient(@Value("${server.auth}") String urlAuth) {
         this.webClient = WebClient.create(urlAuth);
     }
 

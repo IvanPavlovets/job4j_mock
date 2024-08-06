@@ -1,6 +1,5 @@
 package ru.checkdev.notification.telegram.action;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -10,7 +9,7 @@ import ru.checkdev.notification.domain.PersonDTO;
 import ru.checkdev.notification.domain.TgUser;
 import ru.checkdev.notification.service.TgUserService;
 import ru.checkdev.notification.telegram.config.TgConfig;
-import ru.checkdev.notification.telegram.service.TgAuthCallWebClint;
+import ru.checkdev.notification.telegram.service.TgAuthCallWebClient;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -29,7 +28,7 @@ public class RegAction implements Action {
     private static final String ERROR_OBJECT = "error";
     private static final String URL_AUTH_REGISTRATION = "/registration";
     private final TgConfig tgConfig = new TgConfig("tg/", 8);
-    private final TgAuthCallWebClint authCallWebClint;
+    private final TgAuthCallWebClient authCallWebClint;
     private final TgUserService tgUserService;
     private final String urlSiteAuth;
 
@@ -44,7 +43,7 @@ public class RegAction implements Action {
 
         var tgUser = tgUserService.findByChatId(message.getChatId().intValue());
         if (tgUser != null) {
-            textEmail = String.format("Для Вашего аккаунта уже выполнена регистрация. %s/start", sl);
+            textEmail = String.format("Для Вашего аккаунта уже выполнена регистрация.%s/start", sl);
             return new SendMessage(chatId, textEmail);
         }
 
