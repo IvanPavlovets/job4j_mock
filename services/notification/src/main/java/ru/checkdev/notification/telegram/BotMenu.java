@@ -69,7 +69,7 @@ public class BotMenu extends TelegramLongPollingBot {
                 bindingBy.put(chatId, key);
                 var msg = actions.get(key).handle(update.getMessage(), bindingBy);
                 send(msg);
-            } else if (!(key.contains("@")) && bindingBy.containsValue("/new") ) {
+            } else if (!(key.contains("@")) && bindingBy.containsValue("/new")) {
                 var msg = actions.get("/new").handle(update.getMessage(), bindingBy);
                 send(msg);
             } else if (bindingBy.containsKey(chatId)) {
