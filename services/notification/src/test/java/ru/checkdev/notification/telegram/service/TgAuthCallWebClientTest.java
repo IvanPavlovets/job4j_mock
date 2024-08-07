@@ -55,7 +55,7 @@ class TgAuthCallWebClientTest {
                 .set(Calendar.MONTH, Calendar.OCTOBER)
                 .set(Calendar.YEAR, 2023)
                 .build();
-        var personDto = new PersonDTO("","mail", "password", true, Collections.EMPTY_LIST, created);
+        var personDto = new PersonDTO("", "mail", "password", true, Collections.EMPTY_LIST, created);
         when(webClientMock.get()).thenReturn(requestHeadersUriMock);
         when(requestHeadersUriMock.uri("/person/" + personId)).thenReturn(requestHeadersMock);
         when(requestHeadersMock.retrieve()).thenReturn(responseMock);
