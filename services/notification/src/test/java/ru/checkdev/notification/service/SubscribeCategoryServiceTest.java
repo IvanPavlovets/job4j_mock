@@ -20,15 +20,6 @@ public class SubscribeCategoryServiceTest {
     @Autowired
     private SubscribeCategoryService service;
 
-//    @MockBean
-//    private TgRun tgRun;
-//
-//    @MockBean
-//    private TgAuthCallWebClient tgAuthCallWebClient;
-//
-//    @MockBean
-//    private TemplateController templateController;
-
     @Test
     public void whenGetAllSubCatReturnContainsValue() {
         SubscribeCategory subscribeCategory = this.service.save(new SubscribeCategory(0, 1, 1));

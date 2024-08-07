@@ -20,15 +20,6 @@ public class SubscribeTopicServiceTest {
     @Autowired
     private SubscribeTopicService service;
 
-//    @MockBean
-//    private TgRun tgRun;
-//
-//    @MockBean
-//    private TgAuthCallWebClient tgAuthCallWebClient;
-//
-//    @MockBean
-//    private TemplateController templateController;
-
     @Test
     public void whenGetAllSubTopicReturnContainsValue() {
         SubscribeTopic subscribeTopic = this.service.save(new SubscribeTopic(0, 1, 1));
