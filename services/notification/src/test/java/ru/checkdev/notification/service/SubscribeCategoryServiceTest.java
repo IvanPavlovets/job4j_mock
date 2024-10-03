@@ -22,22 +22,23 @@ public class SubscribeCategoryServiceTest {
 
     @Test
     public void whenGetAllSubCatReturnContainsValue() {
-        SubscribeCategory subscribeCategory = this.service.save(new SubscribeCategory(0, 1, 1));
+        SubscribeCategory subscribeCategory = new SubscribeCategory(0, 1, 1);
         List<SubscribeCategory> result = this.service.findAll();
         assertTrue(result.contains(subscribeCategory));
     }
 
     @Test
     public void requestByUserIdReturnCorrectValue() {
-        SubscribeCategory subscribeCategory = this.service.save(new SubscribeCategory(1, 2, 2));
+        SubscribeCategory subscribeCategory = new SubscribeCategory(1, 2, 2);
         List<Integer> result = this.service.findCategoriesByUserId(subscribeCategory.getUserId());
         assertEquals(result, List.of(2));
     }
 
     @Test
     public void whenDeleteSubCatItIsNotExist() {
-        SubscribeCategory subscribeCategory = this.service.save(new SubscribeCategory(2, 3, 3));
-        subscribeCategory = this.service.delete(subscribeCategory);
+        SubscribeCategory subscribeCategory = new SubscribeCategory(2, 3, 3);
+        this.service.save(subscribeCategory);
+        this.service.delete(subscribeCategory);
         List<SubscribeCategory> result = this.service.findAll();
         assertFalse(result.contains(subscribeCategory));
     }
