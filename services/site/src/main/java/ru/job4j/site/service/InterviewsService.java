@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import ru.job4j.site.dto.InterviewDTO;
@@ -14,10 +15,17 @@ import java.util.List;
 @Service
 public class InterviewsService {
 
+    private final ProfilesService profilesService;
+    private final String mockUrl;
+    public InterviewsService(@Value("${service.mock}") String mockUrl, ProfilesService profilesService) {
+        this.mockUrl = mockUrl;
+        this.profilesService = profilesService;
+    }
+
     public Page<InterviewDTO> getAll(String token, int page, int size)
             throws JsonProcessingException {
         var text = new RestAuthCall(String
-                .format("http://localhost:9912/interviews/?page=%d&?size=%d", page, size))
+                .format("%s/interviews/?page=%d&?size=%d", mockUrl, page, size))
                 .get(token);
         var mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -27,7 +35,7 @@ public class InterviewsService {
     }
 
     public List<InterviewDTO> getByType(int type) throws JsonProcessingException {
-        var text = new RestAuthCall(String.format("http://localhost:9912/interviews/%d", type))
+        var text = new RestAuthCall(String.format("%s/interviews/%d", mockUrl, type))
                 .get();
         var mapper = new ObjectMapper();
         return mapper.readValue(text, new TypeReference<>() {
@@ -40,7 +48,7 @@ public class InterviewsService {
      */
     public List<InterviewDTO> getByStatus(int status) throws JsonProcessingException {
         var text = new RestAuthCall(String
-                .format("http://localhost:9912/interviews/findByStatus/%d", status)).get();
+                .format("%s/interviews/findByStatus/%d", mockUrl, status)).get();
         var mapper = new ObjectMapper();
         return mapper.readValue(text, new TypeReference<>() {
         });
@@ -50,8 +58,8 @@ public class InterviewsService {
             throws JsonProcessingException {
         var text =
                 new RestAuthCall(String
-                        .format("http://localhost:9912/interviews/findByTopicId/%d?page=%d&?size=%d",
-                                topicId, page, size)).get();
+                        .format("%s/interviews/findByTopicId/%d?page=%d&?size=%d",
+                                mockUrl, topicId, page, size)).get();
         var mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         var pageType = mapper.getTypeFactory()
@@ -65,8 +73,8 @@ public class InterviewsService {
         var mapper = new ObjectMapper();
         var text =
                 new RestAuthCall(String
-                        .format("http://localhost:9912/interviews/findByTopicsIds/%s?page=%d&?size=%d",
-                                tids, page, size)).get();
+                        .format("%s/interviews/findByTopicsIds/%s?page=%d&?size=%d",
+                                mockUrl, tids, page, size)).get();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         var pageType = mapper.getTypeFactory()
                 .constructParametricType(RestPageImpl.class, InterviewDTO.class);

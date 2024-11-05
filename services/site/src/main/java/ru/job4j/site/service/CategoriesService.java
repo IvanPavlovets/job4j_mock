@@ -3,7 +3,7 @@ package ru.job4j.site.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.job4j.site.domain.StatusInterview;
 import ru.job4j.site.dto.CategoryDTO;
@@ -12,14 +12,21 @@ import ru.job4j.site.dto.TopicDTO;
 
 import java.util.List;
 
-@AllArgsConstructor
 @Service
 public class CategoriesService {
     private final TopicsService topicsService;
     private final InterviewsService interviewsService;
 
+    private final String descServiceUrl;
+
+    public CategoriesService(TopicsService topicsService, InterviewsService interviewsService, @Value("${service.desc}") String descServiceUrl) {
+        this.topicsService = topicsService;
+        this.interviewsService = interviewsService;
+        this.descServiceUrl = descServiceUrl;
+    }
+
     public List<CategoryDTO> getAll() throws JsonProcessingException {
-        var text = new RestAuthCall("http://localhost:9902/categories/").get();
+        var text = new RestAuthCall(descServiceUrl + "/categories/").get();
         var mapper = new ObjectMapper();
         List<CategoryDTO> categoryDTOList = mapper.readValue(text, new TypeReference<>() {
         });
@@ -27,7 +34,7 @@ public class CategoriesService {
     }
 
     public List<CategoryDTO> getPopularFromDesc() throws JsonProcessingException {
-        var text = new RestAuthCall("http://localhost:9902/categories/most_pop").get();
+        var text = new RestAuthCall(descServiceUrl + "/categories/most_pop").get();
         var mapper = new ObjectMapper();
         List<CategoryDTO> categoryDTOList = mapper.readValue(text, new TypeReference<>() {
         });
@@ -36,7 +43,7 @@ public class CategoriesService {
 
     public CategoryDTO create(String token, CategoryDTO category) throws JsonProcessingException {
         var mapper = new ObjectMapper();
-        var out = new RestAuthCall("http://localhost:9902/category/").post(
+        var out = new RestAuthCall(descServiceUrl + "/category/").post(
                 token,
                 mapper.writeValueAsString(category)
         );
@@ -71,7 +78,7 @@ public class CategoriesService {
 
     public void update(String token, CategoryDTO category) throws JsonProcessingException {
         var mapper = new ObjectMapper();
-        new RestAuthCall("http://localhost:9902/category/").put(
+        new RestAuthCall(descServiceUrl +"/category/").put(
                 token,
                 mapper.writeValueAsString(category)
         );
@@ -79,7 +86,7 @@ public class CategoriesService {
 
     public void updateStatistic(String token, int categoryId) throws JsonProcessingException {
         var mapper = new ObjectMapper();
-        new RestAuthCall("http://localhost:9902/category/statistic").put(
+        new RestAuthCall(descServiceUrl + "/category/statistic").put(
                 token, mapper.writeValueAsString(categoryId));
     }
 
